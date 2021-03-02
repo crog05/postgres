@@ -21,7 +21,9 @@ RUN set -eux; \
 # also create the postgres user's home directory with appropriate permissions
 # see https://github.com/docker-library/postgres/issues/274
 	mkdir -p /var/lib/postgresql; \
-	chown -R postgres:postgres /var/lib/postgresql
+	chown -R postgres:postgres /var/lib/postgresql; \
+	mkdir -p /var/lib/backup; \
+	chown -R postgres:postgres /var/lib/backup
 
 # grab gosu for easy step-down from root
 # https://github.com/tianon/gosu/releases
@@ -183,6 +185,7 @@ ENV PGDATA /var/lib/postgresql/data
 # this 777 will be replaced by 700 at runtime (allows semi-arbitrary "--user" values)
 RUN mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA"
 VOLUME /var/lib/postgresql/data
+VOLUME /var/lib/backup
 
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
