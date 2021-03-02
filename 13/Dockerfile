@@ -1,6 +1,9 @@
 # vim:set ft=dockerfile:
 FROM debian:buster-slim
 
+RUN localedef -i fr_FR -c -f UTF-8 -A /usr/share/locale/locale.alias fr_FR.UTF-8
+ENV LANG fr_FR.utf8
+
 RUN set -ex; \
 	if ! command -v gpg > /dev/null; then \
 		apt-get update; \
